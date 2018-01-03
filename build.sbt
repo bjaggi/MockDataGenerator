@@ -1,4 +1,4 @@
-name := "ScalaPrograms"
+name := "MilvusDataGenerator"
 version := "1.0"
 scalaVersion := "2.11.8"
 // With Park 2.2 above was spark 1.6
