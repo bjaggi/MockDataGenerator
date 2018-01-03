@@ -33,6 +33,7 @@ object MockDataGenerator {
 
     val session=SparkSession.builder().
       appName("MockData_Generator").config("spark.sql.crossJoin.enabled","true")
+      .config("mapred.output.compress", false)
      // .config("spark.debug.maxToStringFields","true")
       //.master("local[*]")
       .getOrCreate()
