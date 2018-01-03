@@ -74,9 +74,10 @@ object MockDataGenerator {
 
 //    newBdPositions.select(newBdPositions("d_pos")).distinct().show()
     newBdPositions.show(10)
-//newBdPositions.write.format("csv").save("hdfs:///output_focus_files/bd_positions.csv")
-   newBdPositions.write.csv("hdfs:///output_focus_files/bd_positions.csv")
-
+   //newBdPositions.write.csv("hdfs:///output_focus_files/bd_positions.csv")
+    //write the whole dataframe into a single CSV file
+newBdPositions.coalesce(1).write.csv("hdfs:///output_focus_files/bd_positions")
+   
   }
 
 
