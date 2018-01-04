@@ -49,13 +49,20 @@ object MockDataGenerator {
     val dateAccum  = session.sparkContext.longAccumulator("DateIncrementer" )
     schema.show()
 
-    def nextDateFunc2(dateAcumParam: Int) = {
+def nextDateFunc2(dateAcumParam: Int) = {
       import org.apache.spark.sql.functions.udf
       udf((dPosDate:String) => {
         val formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
-        val dt = formatter.parseDateTime(dPosDate)
-        //println("dPosDate",dPosDate,"dateAccum=",dateAcumParam,"new date by udf:",dt.plusDays(dateAcumParam).toString(DateTimeFormat.forPattern("dd/MM/yyyy")))
-        dt.plusDays(dateAcumParam).toString(DateTimeFormat.forPattern("dd/MM/yyyy"))
+        try {
+          val dt = formatter.parseDateTime(dPosDate)
+          //println("dPosDate",dPosDate,"dateAccum=",dateAcumParam,"new date by udf:",dt.plusDays(dateAcumParam).toString(DateTimeFormat.forPattern("dd/MM/yyyy")))
+          dt.plusDays(dateAcumParam).toString(DateTimeFormat.forPattern("dd/MM/yyyy"))
+        }catch{
+              case e : Exception => {
+                println("exception formattine the date",dPosDate )
+                "1/1/2018"
+              }
+        }
       })
     }
 
