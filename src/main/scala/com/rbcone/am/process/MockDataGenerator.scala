@@ -85,7 +85,8 @@ def nextDateFunc2(dateAcumParam: Int) = {
  //   newBdPositions.show(10)
    //newBdPositions.write.csv("hdfs:///output_focus_files/bd_positions.csv")
     //write the whole dataframe into a single CSV file
-newBdPositions.coalesce(1).write.csv("hdfs:///output_focus_files/bd_positions")
+       newBdPositions.coalesce(1).write.mode(SaveMode.Overwrite).csv("hdfs:///output_focus_files/bd_positions")
+
    
   }
 
