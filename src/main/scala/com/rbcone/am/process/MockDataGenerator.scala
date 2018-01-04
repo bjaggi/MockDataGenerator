@@ -20,15 +20,12 @@ object MockDataGenerator {
   def main(args: Array[String]){
     //System.setProperty("hadoop.home.dir","C:\\Softwares\\Winutils")
     var numOfDays = 0
-    var fileExt = ""
+    //var fileExt = "_" +  DateTime.now.getDayOfMonth + "_" + DateTime.now.getMonthOfYear + "_"+DateTime.now.getMinuteOfHour 
    
       if (args.isEmpty || Option(args{0}).getOrElse("").isEmpty){
         numOfDays = 30
-        fileExt = "_" +  DateTime.now.getDayOfMonth + ":" + DateTime.now.getMonthOfYear + ":"+DateTime.now.getMinuteOfHour 
-
       } else {
         numOfDays = args{0}.toInt
-        fileExt = "_" +  DateTime.now.getDayOfMonth + ":" + DateTime.now.getMonthOfYear + ":"+DateTime.now.getMinuteOfHour 
       }
     println("numOfDays= ",numOfDays)
 
@@ -81,7 +78,7 @@ object MockDataGenerator {
  //   newBdPositions.show(10)
    //newBdPositions.write.csv("hdfs:///output_focus_files/bd_positions.csv")
     //write the whole dataframe into a single CSV file
-newBdPositions.coalesce(1).write.csv("hdfs:///output_focus_files/bd_positions"+fileExt)
+newBdPositions.coalesce(1).write.csv("hdfs:///output_focus_files/bd_positions")
    
   }
 
