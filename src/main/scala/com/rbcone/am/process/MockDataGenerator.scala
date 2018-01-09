@@ -20,12 +20,15 @@ object MockDataGenerator {
   def main(args: Array[String]){
     //System.setProperty("hadoop.home.dir","C:\\Softwares\\Winutils")
     var numOfDays = 0
+   var columnNameToIncrement = "" // should be date format
     //var fileExt = "_" +  DateTime.now.getDayOfMonth + "_" + DateTime.now.getMonthOfYear + "_"+DateTime.now.getMinuteOfHour 
    
       if (args.isEmpty || Option(args{0}).getOrElse("").isEmpty){
         numOfDays = 30
+       columnNameToIncrement = ""
       } else {
         numOfDays = args{0}.toInt
+       columnNameToIncrement =  = args{0}.toString
       }
     println("numOfDays= ",numOfDays)
 
@@ -71,10 +74,11 @@ def nextDateFunc2(dateAcumParam: Int) = {
     for (plusDays <- 0 to numberOfDays)  {
       val nextDate =  start.plusDays(plusDays)
       dateAccum.add(1)
-      val tempBdPositions = bdPositions.withColumn("d_pos",nextDateFunc2(dateAccum.value.toInt)(bdPositions("d_pos") ))
+      //val tempBdPositions = bdPositions.withColumn("d_pos",nextDateFunc2(dateAccum.value.toInt)(bdPositions("d_pos") ))
+     val tempBdPositions = bdPositions.withColumn(columnNameToIncrement,nextDateFunc2(dateAccum.value.toInt)(bdPositions(columnNameToIncrement) ))
       dateAccum.add(1)
-      val tempBdPositions2 = bdPositions.withColumn("d_pos",nextDateFunc2(dateAccum.value.toInt)(bdPositions("d_pos") ))
-
+      //val tempBdPositions2 = bdPositions.withColumn("d_pos",nextDateFunc2(dateAccum.value.toInt)(bdPositions("d_pos") ))val tempBdPositions2 = bdPositions.withColumn("d_pos",nextDateFunc2(dateAccum.value.toInt)(bdPositions("d_pos") ))
+     val tempBdPositions2 = bdPositions.withColumn(columnNameToIncrement,nextDateFunc2(dateAccum.value.toInt)(bdPositions(columnNameToIncrement) ))
       newBdPositions= newBdPositions.union(tempBdPositions.union(tempBdPositions2))
     }
 
@@ -85,8 +89,8 @@ def nextDateFunc2(dateAcumParam: Int) = {
  //   newBdPositions.show(10)
    //newBdPositions.write.csv("hdfs:///output_focus_files/bd_positions.csv")
     //write the whole dataframe into a single CSV file
-       newBdPositions.coalesce(1).write.mode(SaveMode.Overwrite).csv("hdfs:///output_focus_files/bd_positions")
-
+      // newBdPositions.coalesce(1).write.mode(SaveMode.Overwrite).csv("hdfs:///output_focus_files/bd_positions")
+newBdPositions.coalesce(2).write.mode(SaveMode.Overwrite).csv("hdfs:///output_focus_files/bd_ope_all")
    
   }
 
