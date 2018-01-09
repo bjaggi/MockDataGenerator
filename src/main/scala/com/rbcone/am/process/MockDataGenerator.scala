@@ -25,10 +25,10 @@ object MockDataGenerator {
    
       if (args.isEmpty || Option(args{0}).getOrElse("").isEmpty){
         numOfDays = 30
-       columnNameToIncrement = ""
+       columnNameToIncrement = "D_TRADE_DATE"
       } else {
         numOfDays = args{0}.toInt
-       columnNameToIncrement = args{1}.toString
+       columnNameToIncrement = "D_TRADE_DATE"//args{1}.toString
       }
     println("numOfDays= ",numOfDays)
 
