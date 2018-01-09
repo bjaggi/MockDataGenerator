@@ -44,8 +44,9 @@ object MockDataGenerator {
       .getOrCreate()
 
     import session.implicits._
-    val bdPositions = session.read.option("header", "true").csv("hdfs:///input_focus_files/bd_positions.csv").toDF() //  read sample data from a file
-    val bdStructure = bdPositions.select("*").schema // copied the table structure for reference
+    //val bdPositions = session.read.option("header", "true").csv("hdfs:///input_focus_files/bd_positions.csv").toDF() //  read sample data from a file
+  val bdPositions = session.read.option("header", "true").csv("hdfs:///input_focus_files/bd_ope_all.csv").toDF() 
+   val bdStructure = bdPositions.select("*").schema // copied the table structure for reference
     val rows = new java.util.ArrayList[Row]
     val schema = session.createDataFrame(rows, bdStructure)
     var newBdPositions = session.createDataFrame(bdPositions.toJavaRDD, bdStructure)//bdPositions
