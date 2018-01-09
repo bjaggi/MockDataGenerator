@@ -28,7 +28,7 @@ object MockDataGenerator {
        columnNameToIncrement = ""
       } else {
         numOfDays = args{0}.toInt
-       columnNameToIncrement = args{0}.toString
+       columnNameToIncrement = args{1}.toString
       }
     println("numOfDays= ",numOfDays)
 
