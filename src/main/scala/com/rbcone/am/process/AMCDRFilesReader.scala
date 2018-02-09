@@ -3,6 +3,8 @@ package com.rbcone.am.process
 import org.apache.spark.SparkConf
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.col
+
 
 
 /**
@@ -35,22 +37,40 @@ object AMCDRFilesReader {
     println(" All File Count= "+clientFileWithSelectedColumns.count())
 
     // Filter based on Entity_type == party and Client_Type_code == Legal
-    val companyData = clientFileWithSelectedColumns.
+    var companyData = clientFileWithSelectedColumns.
       filter(clientFileWithSelectedColumns.col("ENTITY_TYPE"). === ("PARTY")).
       filter(clientFileWithSelectedColumns.col("CLIENT_TYPE_CODE"). === ("LEGAL"))
 
 
 
-    val relationShipData = clientFileWithSelectedColumns.
+    var fundData = clientFileWithSelectedColumns.
       filter(clientFileWithSelectedColumns.col("ENTITY_TYPE"). === ("FUND")).
       filter(clientFileWithSelectedColumns.col("CLIENT_TYPE_CODE"). === ("UNIT"))
 
     companyData.show()
-    relationShipData.show()
+    fundData.show()
+
+    companyData = companyData.as("CLIENT_TABLE")
+    fundData = fundData.as("FUND_TABLE")
+
+    val joinedDF = companyData.
+      join(fundData, col("CLIENT_TABLE.CLIENT_ID") === col("FUND_TABLE.ULTIMATE_PARENT_ID"),"inner")
+
+    joinedDF.select(
+      col("CLIENT_TABLE.CLIENT_ID"),
+      col("FUND_TABLE.ULTIMATE_PARENT_ID"),
+      col("FUND_TABLE.CLIENT_ID"), // FUND_ID
+      col("CLIENT_TABLE.INTS_STATUS"),
+      col("CLIENT_TABLE.ON_BOARD_DATE"),
+      col("CLIENT_TABLE.CEASED_DATE")
+    ).show
+
+    /*val joinedDF = companyData.
+      join(fundData,
+        joinedDF.select(col("CLIENT_ID"), col("ISO_LEGAL_NAME"), col("ULTIMATE_PARENT_ID"), col("CLIENT_ID"))
+        companyData.col("CLIENT_ID") === fundData.col("ULTIMATE_PARENT_ID"),"inner").show*/
 
 
-    companyData.join(clientFileWithSelectedColumns,
-      companyData.col("CLIENT_ID") === relationShipData.col("ULTIMATE_PARENT_ID"))
 
 
 
